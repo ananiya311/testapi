@@ -1,0 +1,34 @@
+name: FTP Deploy
+
+on: 
+  push:
+    branches:
+      - main  # Adjust this if your default branch is not 'main'
+
+jobs:
+  deploy:
+    name: Deploy Node.js App via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # - name: Install dependencies
+    #   run: npm install
+
+    # - name: Build project
+    #   run: npm run build 
+
+    - name: Deploy via FTP
+      uses: SamKirkland/FTP-Deploy-Action@4.3.1
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./  # Local directory containing the project (adjust if needed)
+        server-dir: /api.leadaddis.com/  # Adjust to the path of your cPanel public directory
+        exclude: |
+          **/node_modules/**  # Exclude unnecessary directories/files
+          **/.git/**
+          .github/**
